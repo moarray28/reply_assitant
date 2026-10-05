@@ -1,0 +1,132 @@
+[
+  {
+    "id": "TC01",
+    "title": "GlowCare damaged product",
+    "input": {
+      "brand": "GlowCare",
+      "question": "My order was delivered but the bottle is broken. What can I do?"
+    },
+    "expected_behavior": "Return the GlowCare damaged-product policy and suggest a safe, policy-based response.",
+    "actual_result": "Brand-filtered retrieval verified in API tests. OpenRouter generation is not verified because OPENROUTER_API_KEY is not configured.",
+    "pass_fail": "pending"
+  },
+  {
+    "id": "TC02",
+    "title": "PureBottle damaged product",
+    "input": {
+      "brand": "PureBottle",
+      "question": "The item arrived broken. Can I get a replacement?"
+    },
+    "expected_behavior": "Use the 48-hour damaged-product rule only and avoid promising replacement without policy support.",
+    "actual_result": "Brand-filtered 48-hour policy retrieval verified in API tests. OpenRouter generation is not verified because OPENROUTER_API_KEY is not configured.",
+    "pass_fail": "pending"
+  },
+  {
+    "id": "TC03",
+    "title": "GlowCare return policy",
+    "input": {
+      "brand": "GlowCare",
+      "question": "What is the return deadline for my order?"
+    },
+    "expected_behavior": "Return the GlowCare rule that returns are accepted within 30 days of delivery.",
+    "actual_result": "30-day GlowCare return policy is retrieved by the API. OpenRouter generation is not verified because OPENROUTER_API_KEY is not configured.",
+    "pass_fail": "pending"
+  },
+  {
+    "id": "TC04",
+    "title": "PureBottle return policy",
+    "input": {
+      "brand": "PureBottle",
+      "question": "Can I return the product after 2 weeks?"
+    },
+    "expected_behavior": "Return the PureBottle policy of 14-day returns and state the applicable limit.",
+    "actual_result": "14-day PureBottle return policy is retrieved by the API. OpenRouter generation is not verified because OPENROUTER_API_KEY is not configured.",
+    "pass_fail": "pending"
+  },
+  {
+    "id": "TC05",
+    "title": "GlowCare refund policy",
+    "input": {
+      "brand": "GlowCare",
+      "question": "When will my refund be processed?"
+    },
+    "expected_behavior": "Return the GlowCare refund policy: 7 business days after approval.",
+    "actual_result": "7-business-day GlowCare refund policy is retrieved by the API. OpenRouter generation is not verified because OPENROUTER_API_KEY is not configured.",
+    "pass_fail": "pending"
+  },
+  {
+    "id": "TC06",
+    "title": "PureBottle refund policy",
+    "input": {
+      "brand": "PureBottle",
+      "question": "How soon can I expect a refund?"
+    },
+    "expected_behavior": "Return the PureBottle refund policy: 3 business days after approval.",
+    "actual_result": "3-business-day PureBottle refund policy is retrieved by the API. OpenRouter generation is not verified because OPENROUTER_API_KEY is not configured.",
+    "pass_fail": "pending"
+  },
+  {
+    "id": "TC07",
+    "title": "Cross-brand isolation",
+    "input": {
+      "brand": "GlowCare",
+      "question": "My bottle arrived broken. Is there a 48-hour rule?"
+    },
+    "expected_behavior": "The AI must not use PureBottle's 48-hour damaged-product rule for the GlowCare conversation.",
+    "actual_result": "Pass for retrieval isolation: GlowCare retrieves only its 14-day entry. A live model call was not made because no OpenRouter key is configured.",
+    "pass_fail": "pass"
+  },
+  {
+    "id": "TC08",
+    "title": "Unsupported question",
+    "input": {
+      "brand": "GlowCare",
+      "question": "Can I get a free replacement for my subscription?"
+    },
+    "expected_behavior": "Return a safe no-policy response and ask for human verification.",
+    "actual_result": "Pass: API returns an empty retrieval and safe agent-verification response.",
+    "pass_fail": "pass"
+  },
+  {
+    "id": "TC09",
+    "title": "Out-of-policy request",
+    "input": {
+      "brand": "PureBottle",
+      "question": "I reported the damage after 10 days and need an immediate replacement."
+    },
+    "expected_behavior": "Do not promise a replacement or refund if the request falls outside policy; recommend human review.",
+    "actual_result": "Pass: a report after 10 days receives no replacement promise and is escalated to human review.",
+    "pass_fail": "pass"
+  },
+  {
+    "id": "TC10",
+    "title": "Knowledge base update",
+    "input": {
+      "brand": "GlowCare",
+      "action": "Add a new policy entry for returns extension"
+    },
+    "expected_behavior": "The knowledge base page should reflect the new entry without modifying source code.",
+    "actual_result": "Pass: API create, update, delete, and retrieval of an updated policy were integration-tested.",
+    "pass_fail": "pass"
+  },
+  {
+    "id": "TC11",
+    "title": "Agent edit",
+    "input": {
+      "step": "Agent updates the AI draft before approval"
+    },
+    "expected_behavior": "The edited response replaces the AI draft and remains visible in the conversation flow.",
+    "actual_result": "Pass: edited final message persists in the conversation and the corresponding AI log.",
+    "pass_fail": "pass"
+  },
+  {
+    "id": "TC12",
+    "title": "AI failure/manual fallback",
+    "input": {
+      "failure": "LLM timeout or invalid response"
+    },
+    "expected_behavior": "Display: AI service is currently unavailable. Please draft the response manually.",
+    "actual_result": "The unconfigured-provider 503 path returns context and supports the manual editor. A real timeout/invalid-provider response was not exercised.",
+    "pass_fail": "pending"
+  }
+]

@@ -1,0 +1,4 @@
+project_id = "cx-reply-assistant"
+
+[functions.generate-reply]
+verify_jwt = true
